@@ -1,0 +1,296 @@
+SUBMITTY INPUT/OUTPUT GRADED TEST CASES FOR HOMEWORK 4
+
+Note that the server is shut down and the storage directory
+ cleared out between each test run.
+
+================================================================================
+
+Test A:
+-- start the server with "./a.out <port-number>"
+-- client A connects
+-- client A sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client A should receive "ACK\n"
+-- client A sends "GET xyz.jpg 5555 2000\n"
+-- client A should receive "ERROR NO SUCH FILE\n"
+-- client A sends "LIST\n"
+-- client A should receive "1 mouse.txt\n"
+-- client A disconnects
+
+Test A Expected Output:
+Started server
+Listening for TCP connections on port: 2999
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 23406] Received PUT mouse.txt 917
+[child 23406] Stored file "mouse.txt" (917 bytes)
+[child 23406] Sent ACK
+[child 23406] Received GET xyz.jpg 5555 2000
+[child 23406] Sent ERROR NO SUCH FILE
+[child 23406] Received LIST
+[child 23406] Sent 1 mouse.txt
+[child 23406] Client disconnected
+
+================================================================================
+
+Test B:
+-- start the server with "./a.out <port-number>"
+-- client B connects
+-- client B sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client B should receive "ACK\n"
+-- client B sends "PUT legend.txt 70672\n<legend.txt>"
+-- client B should receive "ACK\n"
+-- client B sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client B should receive "ACK\n"
+-- client B sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client B should receive "ERROR FILE EXISTS\n"
+-- client B sends "LIST\n"
+-- client B should receive "3 chicken.txt legend.txt mouse.txt\n"
+-- client B sends "GET chicken.txt 4 5\n"
+-- client B should receive "ACK 5\nquick"
+-- client B sends "GET legend.txt 50092 39\n"
+-- client B should receive "ACK 39\nbroken rocks and trunks of fallen trees"
+-- client B disconnects
+
+Test B Expected Output:
+Started server
+Listening for TCP connections on port: 2999
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 23411] Received PUT mouse.txt 917
+[child 23411] Stored file "mouse.txt" (917 bytes)
+[child 23411] Sent ACK
+[child 23411] Received PUT legend.txt 70672
+[child 23411] Stored file "legend.txt" (70672 bytes)
+[child 23411] Sent ACK
+[child 23411] Received PUT chicken.txt 31
+[child 23411] Stored file "chicken.txt" (31 bytes)
+[child 23411] Sent ACK
+[child 23411] Received PUT mouse.txt 917
+[child 23411] Sent ERROR FILE EXISTS
+[child 23411] Received LIST
+[child 23411] Sent 3 chicken.txt legend.txt mouse.txt
+[child 23411] Received GET chicken.txt 4 5
+[child 23411] Sent ACK 5
+[child 23411] Sent 5 bytes of "chicken.txt" from offset 4
+[child 23411] Received GET legend.txt 50092 39
+[child 23411] Sent ACK 39
+[child 23411] Sent 39 bytes of "legend.txt" from offset 50092
+[child 23411] Client disconnected
+
+================================================================================
+
+Test C:
+-- start the server with "./a.out <port-number>"
+-- client C connects
+-- client C sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client C should receive "ACK\n"
+-- client C sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client C should receive "ERROR FILE EXISTS\n"
+-- client C sends "PUT sonny1978.jpg 100774\n<sonny1978.jpg>"
+-- client C should receive "ACK\n"
+-- client C sends "LIST\n"
+-- client C should receive "2 chicken.txt sonny1978.jpg\n"
+-- client C sends "GET sonny1978.jpg 920 11\n"
+-- client C should receive "ACK 11\nCocoa Puffs"
+-- client C sends "GET sonny1978.jpg 95898 3\n"
+-- client C should receive "ACK 3\nYum"
+-- client C disconnects
+
+Test C Expected Output:
+Started server
+Listening for TCP connections on port: 2999
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 23416] Received PUT chicken.txt 31
+[child 23416] Stored file "chicken.txt" (31 bytes)
+[child 23416] Sent ACK
+[child 23416] Received PUT chicken.txt 31
+[child 23416] Sent ERROR FILE EXISTS
+[child 23416] Received PUT sonny1978.jpg 100774
+[child 23416] Stored file "sonny1978.jpg" (100774 bytes)
+[child 23416] Sent ACK
+[child 23416] Received LIST
+[child 23416] Sent 2 chicken.txt sonny1978.jpg
+[child 23416] Received GET sonny1978.jpg 920 11
+[child 23416] Sent ACK 11
+[child 23416] Sent 11 bytes of "sonny1978.jpg" from offset 920
+[child 23416] Received GET sonny1978.jpg 95898 3
+[child 23416] Sent ACK 3
+[child 23416] Sent 3 bytes of "sonny1978.jpg" from offset 95898
+[child 23416] Client disconnected
+
+================================================================================
+
+Test D:
+-- start the server with "./a.out <port-number>"
+-- client D connects
+-- client D sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client D should receive "ACK\n"
+-- client D sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client D should receive "ACK\n"
+-- client D sends "GET chicken.txt 29 1\n"
+-- client D should receive "ACK 1\n."
+-- client D sends "GET chicken.txt 30 2\n"
+-- client D should receive "ERROR INVALID BYTE RANGE\n"
+-- client D sends "PUT ospd.txt 614670\n<ospd.txt>"
+-- client D should receive "ACK\n"
+-- client D sends "GET ospd.txt 104575 26\n"
+-- client D should receive "ACK 26\ncoco\ncocoa\ncocoanut\ncocoas"
+-- client D sends "LIST\n"
+-- client D should receive "3 chicken.txt mouse.txt ospd.txt\n"
+-- client D disconnects
+
+Test D Expected Output:
+Started server
+Listening for TCP connections on port: 2999
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 25023] Received PUT mouse.txt 917
+[child 25023] Stored file "mouse.txt" (917 bytes)
+[child 25023] Sent ACK
+[child 25023] Received PUT chicken.txt 31
+[child 25023] Stored file "chicken.txt" (31 bytes)
+[child 25023] Sent ACK
+[child 25023] Received GET chicken.txt 29 1
+[child 25023] Sent ACK 1
+[child 25023] Sent 1 bytes of "chicken.txt" from offset 29
+[child 25023] Received GET chicken.txt 30 2
+[child 25023] Sent ERROR INVALID BYTE RANGE
+[child 25023] Received PUT ospd.txt 614670
+[child 25023] Stored file "ospd.txt" (614670 bytes)
+[child 25023] Sent ACK
+[child 25023] Received GET ospd.txt 104575 26
+[child 25023] Sent ACK 26
+[child 25023] Sent 26 bytes of "ospd.txt" from offset 104575
+[child 25023] Received LIST
+[child 25023] Sent 3 chicken.txt mouse.txt ospd.txt
+[child 25023] Client disconnected
+
+================================================================================
+
+Test E:
+
+Run Tests A, B, and C in that order, with a one-second delay between each test.
+
+-- start the server with "./a.out <port-number>"
+-- client A connects
+-- client A sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client A should receive "ACK\n"
+-- client A sends "GET xyz.jpg 5555 2000\n"
+-- client A should receive "ERROR NO SUCH FILE\n"
+-- client A sends "LIST\n"
+-- client A should receive "1 mouse.txt\n"
+-- client A disconnects
+-- client B connects
+-- client B sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client B should receive "ERROR FILE EXISTS\n"
+-- client B sends "PUT legend.txt 70672\n<legend.txt>"
+-- client B should receive "ACK\n"
+-- client B sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client B should receive "ACK\n"
+-- client B sends "PUT mouse.txt 917\n<mouse.txt>"
+-- client B should receive "ERROR FILE EXISTS\n"
+-- client B sends "LIST\n"
+-- client B should receive "3 chicken.txt legend.txt mouse.txt\n"
+-- client B sends "GET chicken.txt 4 5\n"
+-- client B should receive "ACK 5\nquick"
+-- client B sends "GET legend.txt 50092 39\n"
+-- client B should receive "ACK 39\nbroken rocks and trunks of fallen trees"
+-- client B disconnects
+-- client C connects
+-- client C sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client C should receive "ERROR FILE EXISTS\n"
+-- client C sends "PUT chicken.txt 31\n<chicken.txt>"
+-- client C should receive "ERROR FILE EXISTS\n"
+-- client C sends "PUT sonny1978.jpg 100774\n<sonny1978.jpg>"
+-- client C should receive "ACK\n"
+-- client C sends "LIST\n"
+-- client C should receive "4 chicken.txt legend.txt mouse.txt sonny1978.jpq\n"
+-- client C sends "GET sonny1978.jpg 920 11\n"
+-- client C should receive "ACK 11\nCocoa Puffs"
+-- client C sends "GET sonny1978.jpg 95898 3\n"
+-- client C should receive "ACK 3\nYum"
+-- client C disconnects
+
+Test E Expected Output:
+Started server
+Listening for TCP connections on port: 2999
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 30409] Received PUT mouse.txt 917
+[child 30409] Stored file "mouse.txt" (917 bytes)
+[child 30409] Sent ACK
+[child 30409] Received GET xyz.jpg 5555 2000
+[child 30409] Sent ERROR NO SUCH FILE
+[child 30409] Received LIST
+[child 30409] Sent 1 mouse.txt
+[child 30409] Client disconnected
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 30411] Received PUT mouse.txt 917
+[child 30411] Sent ERROR FILE EXISTS
+[child 30411] Received PUT legend.txt 70672
+[child 30411] Stored file "legend.txt" (70672 bytes)
+[child 30411] Sent ACK
+[child 30411] Received PUT chicken.txt 31
+[child 30411] Stored file "chicken.txt" (31 bytes)
+[child 30411] Sent ACK
+[child 30411] Received PUT mouse.txt 917
+[child 30411] Sent ERROR FILE EXISTS
+[child 30411] Received LIST
+[child 30411] Sent 3 chicken.txt legend.txt mouse.txt
+[child 30411] Received GET chicken.txt 4 5
+[child 30411] Sent ACK 5
+[child 30411] Sent 5 bytes of "chicken.txt" from offset 4
+[child 30411] Received GET legend.txt 50092 39
+[child 30411] Sent ACK 39
+[child 30411] Sent 39 bytes of "legend.txt" from offset 50092
+[child 30411] Client disconnected
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 30413] Received PUT chicken.txt 31
+[child 30413] Sent ERROR FILE EXISTS
+[child 30413] Received PUT chicken.txt 31
+[child 30413] Sent ERROR FILE EXISTS
+[child 30413] Received PUT sonny1978.jpg 100774
+[child 30413] Stored file "sonny1978.jpg" (100774 bytes)
+[child 30413] Sent ACK
+[child 30413] Received LIST
+[child 30413] Sent 4 chicken.txt legend.txt mouse.txt sonny1978.jpg
+[child 30413] Received GET sonny1978.jpg 920 11
+[child 30413] Sent ACK 11
+[child 30413] Sent 11 bytes of "sonny1978.jpg" from offset 920
+[child 30413] Received GET sonny1978.jpg 95898 3
+[child 30413] Sent ACK 3
+[child 30413] Sent 3 bytes of "sonny1978.jpg" from offset 95898
+[child 30413] Client disconnected
+
+================================================================================
+
+Test F:
+-- start the server with "./a.out <port-number>"
+-- clients A, B, and C simultaneously connect
+-- each client does the following:
+   -- client sends "PUT mouse.txt 917\n<mouse.txt>"
+   -- client should receive "ACK\n" or "ERROR FILE EXISTS\n"
+   -- client sends "GET xyz.jpg 5555 2000\n"
+   -- client should receive "ERROR NO SUCH FILE\n"
+   -- client disconnects
+
+Test F Expected Output (other interleaving may occur):
+Started server
+Listening for TCP connections on port: 2999
+Rcvd incoming TCP connection from: 127.0.0.1
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 49093] Received PUT mouse.txt 917
+Rcvd incoming TCP connection from: 127.0.0.1
+[child 49095] Received PUT mouse.txt 917
+[child 49094] Received PUT mouse.txt 917
+[child 49095] Sent ERROR FILE EXISTS
+[child 49094] Sent ERROR FILE EXISTS
+[child 49095] Received GET xyz.jpg 5555 2000
+[child 49094] Received GET xyz.jpg 5555 2000
+[child 49095] Sent ERROR NO SUCH FILE
+[child 49094] Sent ERROR NO SUCH FILE
+[child 49094] Client disconnected
+[child 49095] Client disconnected
+[child 49093] Stored file "mouse.txt" (917 bytes)
+[child 49093] Sent ACK
+[child 49093] Received GET xyz.jpg 5555 2000
+[child 49093] Sent ERROR NO SUCH FILE
+[child 49093] Client disconnected
+
+================================================================================
